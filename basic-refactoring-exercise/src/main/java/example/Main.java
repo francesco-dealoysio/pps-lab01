@@ -9,11 +9,18 @@ public class Main {
     public static void main(String[] args) {
         final AccountHolder accountHolder = new AccountHolder("Mario", "Rossi", 1);
         final BankAccount bankAccount = new SimpleBankAccount(accountHolder, 0);
-        bankAccount.deposit(accountHolder.id(), 100);
-        System.out.println("Current balance is " + bankAccount.getBalance());
+        //if (bankAccount.deposit(accountHolder.id(), 100)) {
+        if (bankAccount.deposit(2, 100)) {
+                System.out.println("Current balance is " + bankAccount.getBalance());
+        } else {
+                System.out.println("Deposit failed!");
+        }
+
         bankAccount.withdraw(accountHolder.id(), 30);
         System.out.println("Current balance is " + bankAccount.getBalance());
         bankAccount.withdraw(accountHolder.id(), 80);
+        System.out.println("Current balance is " + bankAccount.getBalance());
+        bankAccount.withdraw(accountHolder.id(), 1);
         System.out.println("Current balance is " + bankAccount.getBalance());
     }
 }

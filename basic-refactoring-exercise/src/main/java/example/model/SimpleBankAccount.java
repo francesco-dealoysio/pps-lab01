@@ -7,8 +7,8 @@ package example.model;
  */
 public class SimpleBankAccount implements BankAccount {
 
-    private double balance;
-    private final AccountHolder holder;
+    private double balance; // TDD: minimize accessibility of class members
+    private final AccountHolder holder; // TDD: minimize mutability
 
     public SimpleBankAccount(final AccountHolder holder, final double balance) {
         this.holder = holder;
@@ -21,16 +21,22 @@ public class SimpleBankAccount implements BankAccount {
     }
 
     @Override
-    public void deposit(final int userID, final double amount) {
+    public boolean deposit(final int userID, final double amount) {
+        boolean result = false;
+
         if (checkUser(userID)) {
             this.balance += amount;
+            result = true;
         }
+        return result;
     }
 
     @Override
     public void withdraw(final int userID, final double amount) {
+
         if (checkUser(userID) && isWithdrawAllowed(amount)) {
             this.balance -= amount;
+            this.balance -= 1; // TDD: do not abuse obscure operators (+=,--)
         }
     }
 
