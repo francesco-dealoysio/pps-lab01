@@ -4,8 +4,7 @@ public class SimpleSmartDoorLock implements SmartDoorLock {
     private final int NO_PIN = -1;
     private final int MAX_ATTEMPTS = 3;
 
-    private int pin;        // forse sarebbe meglio utilizzare il tipo String per le 4 cifre
-    private boolean open;   // forse andrebbe considerato anche lo stato open/close per le operazioni lock e unlock
+    private int pin;        // forse si potrebbe utilizzare il tipo String per le 4 cifre
     private boolean locked;
     private boolean blocked;
     private int failedAttempts;
@@ -16,7 +15,6 @@ public class SimpleSmartDoorLock implements SmartDoorLock {
 
     private void initState() {
         this.pin = NO_PIN;
-        //this.open = false;
         this.locked = false;
         this.blocked = false;
         this.failedAttempts = 0;
@@ -46,21 +44,7 @@ public class SimpleSmartDoorLock implements SmartDoorLock {
     public boolean isNoPin() {
         return this.pin == this.NO_PIN;
     }
-/*
-    public boolean isOpen() {
-        return this.open;
-    }
 
-    public void open() {
-        if (!isOpen() && !isLocked()) {
-            this.open = true;
-        }
-    }
-
-    public void close() {
-        this.open = false;
-    }
-*/
     @Override
     public void setPin(int pin) {
         if (!isLocked() && !isBlocked() && checkPinFormat(pin)) {
@@ -88,7 +72,7 @@ public class SimpleSmartDoorLock implements SmartDoorLock {
     }
 
     @Override
-    public void lock() { // forse sarebbe meglio prevedere il pin come parametro
+    public void lock() {
         if (!this.isNoPin()) {
             this.locked = true;
         } else {
@@ -121,4 +105,74 @@ public class SimpleSmartDoorLock implements SmartDoorLock {
     public void reset() {
         this.initState();
     }
+
+    public String toString() {
+        String message = "";
+        String line = "-".repeat(40);
+        String strPin = ("0000" + pin).substring(("0000" + pin).length() - 4);
+
+        message += line + "\n";
+        message += "Pin................: " + (pin == -1 ? "-" : strPin) + "\n";
+        message += "Locked.............: " + locked + "\n";
+        message += "Blocked............: " + blocked + "\n";
+        message += "Max unlock attempts: " + MAX_ATTEMPTS + "\n";
+        message += "Failed attempts....: " + failedAttempts + "\n";
+        message += line;
+
+        return message;
+    }
+
+    public static void main(String[] args) {
+        int value;
+        SimpleSmartDoorLock simpleSmartDoorLock;
+
+        System.out.println("\n - SmartDoorLock created!");
+        simpleSmartDoorLock = new SimpleSmartDoorLock();
+        System.out.println("" + simpleSmartDoorLock);
+
+        value = 123;
+        System.out.println("Executed setPin("+value+")");
+        simpleSmartDoorLock.setPin(123);
+
+        System.out.println("Executed lock()");
+        simpleSmartDoorLock.lock();
+        System.out.println("" + simpleSmartDoorLock);
+
+        value = 123;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+        System.out.println("" + simpleSmartDoorLock);
+
+        value = 256;
+        System.out.println("Executed setPin("+value+")");
+        simpleSmartDoorLock.setPin(256);
+
+        System.out.println("Executed lock()");
+        simpleSmartDoorLock.lock();
+        System.out.println("" + simpleSmartDoorLock);
+
+        value = 200;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+
+        value = 123;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+
+        value = 257;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+
+        value = 246;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+
+        value = 258;
+        System.out.println("Executed unlock("+value+")");
+        simpleSmartDoorLock.unlock(value);
+
+        System.out.println("" + simpleSmartDoorLock);
+    }
+
+
 }
